@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Countdown Timer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <section class="timer-card" aria-label="Countdown timer">
+        <p class="eyebrow">Modern Countdown</p>
+        <h1>Focus Timer</h1>
+
+        <div class="timer-display" id="timerDisplay" role="timer" aria-live="polite">
+          05:00
+        </div>
+
+        <label class="input-label" for="minutesInput">Set minutes</label>
+        <input
+          id="minutesInput"
+          class="minutes-input"
+          type="number"
+          min="1"
+          max="180"
+          value="5"
+        />
+
+        <div class="controls">
+          <button id="startPauseBtn" class="btn btn-primary" type="button">Start</button>
+          <button id="resetBtn" class="btn btn-secondary" type="button">Reset</button>
+        </div>
+
+        <p id="statusText" class="status">Ready when you are ✨</p>
+      </section>
+    </main>
+
+    <script src="script.js"></script>
+  </body>
+</html>
