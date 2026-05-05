@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Mini Currency Converter</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:#0f172a;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:1rem}
+.card{background:#1e293b;border-radius:1.5rem;padding:2rem;width:100%;max-width:420px;box-shadow:0 25px 60px rgba(0,0,0,0.5)}
+h1{color:#f1f5f9;font-size:1.25rem;font-weight:600;margin-bottom:1.75rem;display:flex;align-items:center;gap:0.5rem}
+label{color:#94a3b8;font-size:0.75rem;font-weight:500;text-transform:uppercase;letter-spacing:0.05em;display:block;margin-bottom:0.5rem}
+.input-row{display:flex;gap:0.5rem;margin-bottom:0.75rem}
+input[type=number]{flex:1;background:#0f172a;border:1px solid #334155;border-radius:0.75rem;color:#f1f5f9;font-size:1.4rem;font-weight:600;padding:0.75rem 1rem;outline:none;transition:border-color 0.2s;min-width:0}
+input[type=number]:focus{border-color:#6366f1}
+input[type=number]::-webkit-inner-spin-button{display:none}
+select{background:#0f172a;border:1px solid #334155;border-radius:0.75rem;color:#f1f5f9;font-size:0.95rem;font-weight:600;padding:0.75rem 0.875rem;outline:none;cursor:pointer;transition:border-color 0.2s}
+select:focus{border-color:#6366f1}
+.swap-btn{display:flex;align-items:center;justify-content:center;margin:0.75rem auto;width:2.5rem;height:2.5rem;border-radius:50%;background:#334155;border:none;color:#94a3b8;cursor:pointer;font-size:1.2rem;transition:all 0.2s}
+.swap-btn:hover{background:#6366f1;color:#fff;transform:rotate(180deg)}
+.rate-info{margin-top:1rem;padding:0.75rem 1rem;background:#0f172a;border-radius:0.75rem;color:#94a3b8;font-size:0.85rem;text-align:center}
+.rate-info span{color:#6366f1;font-weight:600}
+.flag{font-size:1.1rem}
+</style>
+</head>
+<body>
+<div class="card">
+  <h1><span>💱</span> Mini Currency Converter</h1>
+  <label>Amount</label>
+  <div class="input-row">
+    <input type="number" id="amount-from" value="1" min="0"/>
+    <select id="from-currency">
+      <option value="USD">🇺🇸 USD</option>
+      <option value="EUR">🇪🇺 EUR</option>
+      <option value="GBP">🇬🇧 GBP</option>
+      <option value="INR" selected>🇮🇳 INR</option>
+      <option value="JPY">🇯🇵 JPY</option>
+      <option value="CAD">🇨🇦 CAD</option>
+      <option value="AUD">🇦🇺 AUD</option>
+      <option value="CHF">🇨🇭 CHF</option>
+      <option value="CNY">🇨🇳 CNY</option>
+      <option value="AED">🇦🇪 AED</option>
+      <option value="SGD">🇸🇬 SGD</option>
+      <option value="HKD">🇭🇰 HKD</option>
+      <option value="MXN">🇲🇽 MXN</option>
+      <option value="BRL">🇧🇷 BRL</option>
+      <option value="KRW">🇰🇷 KRW</option>
+      <option value="NOK">🇳🇴 NOK</option>
+      <option value="SEK">🇸🇪 SEK</option>
+      <option value="DKK">🇩🇰 DKK</option>
+      <option value="NZD">🇳🇿 NZD</option>
+      <option value="ZAR">🇿🇦 ZAR</option>
+    </select>
+  </div>
+  <button class="swap-btn" id="swap">⇅</button>
+  <label>Converted Amount</label>
+  <div class="input-row">
+    <input type="number" id="amount-to" value="" min="0"/>
+    <select id="to-currency">
+      <option value="USD" selected>🇺🇸 USD</option>
+      <option value="EUR">🇪🇺 EUR</option>
+      <option value="GBP">🇬🇧 GBP</option>
+      <option value="INR">🇮🇳 INR</option>
+      <option value="JPY">🇯🇵 JPY</option>
+      <option value="CAD">🇨🇦 CAD</option>
+      <option value="AUD">🇦🇺 AUD</option>
+      <option value="CHF">🇨🇭 CHF</option>
+      <option value="CNY">🇨🇳 CNY</option>
+      <option value="AED">🇦🇪 AED</option>
+      <option value="SGD">🇸🇬 SGD</option>
+      <option value="HKD">🇭🇰 HKD</option>
+      <option value="MXN">🇲🇽 MXN</option>
+      <option value="BRL">🇧🇷 BRL</option>
+      <option value="KRW">🇰🇷 KRW</option>
+      <option value="NOK">🇳🇴 NOK</option>
+      <option value="SEK">🇸🇪 SEK</option>
+      <option value="DKK">🇩🇰 DKK</option>
+      <option value="NZD">🇳🇿 NZD</option>
+      <option value="ZAR">🇿🇦 ZAR</option>
+    </select>
+  </div>
+  <div class="rate-info">1 <span id="rate-from">INR</span> = <span id="rate-value">—</span> <span id="rate-to">USD</span></div>
+</div>
+<script>
+const rates = {
+  USD:1, EUR:0.924, GBP:0.792, INR:83.5, JPY:153.2, CAD:1.365,
+  AUD:1.524, CHF:0.898, CNY:7.24, AED:3.672, SGD:1.345, HKD:7.82,
+  MXN:16.9, BRL:4.97, KRW:1340, NOK:10.6, SEK:10.5, DKK:6.88,
+  NZD:1.632, ZAR:18.6
+};
+function convert(){
+  const from=document.getElementById('from-currency').value;
+  const to=document.getElementById('to-currency').value;
+  const amt=parseFloat(document.getElementById('amount-from').value)||0;
+  const result=(amt/rates[from])*rates[to];
+  document.getElementById('amount-to').value=result.toFixed(4);
+  document.getElementById('rate-from').textContent=from;
+  document.getElementById('rate-to').textContent=to;
+  document.getElementById('rate-value').textContent=((1/rates[from])*rates[to]).toFixed(6);
+}
+document.getElementById('swap').addEventListener('click',()=>{
+  const f=document.getElementById('from-currency');
+  const t=document.getElementById('to-currency');
+  [f.value,t.value]=[t.value,f.value];
+  convert();
+});
+document.getElementById('amount-from').addEventListener('input',convert);
+document.getElementById('from-currency').addEventListener('change',convert);
+document.getElementById('to-currency').addEventListener('change',convert);
+convert();
+</script>
+</body>
+</html>
